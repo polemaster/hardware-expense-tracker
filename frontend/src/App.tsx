@@ -1,7 +1,11 @@
-import "./App.css";
+import { InvoiceCard } from "./components/InvoiceCard";
 
 function App() {
-  return <></>;
+  return (
+    <main className="mt-5">
+      <InvoiceCard></InvoiceCard>
+    </main>
+  );
 }
 
 export default App;
