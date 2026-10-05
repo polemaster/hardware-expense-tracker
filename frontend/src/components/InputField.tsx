@@ -1,11 +1,9 @@
 import { cn } from "../lib/utils";
 
-interface Props {
-  value: string | number;
-  inputType: "number" | "text";
+interface Props
+  extends Omit<React.ComponentProps<"input">, "onChange" | "type"> {
+  inputType: "number" | "text" | "date";
   onChange: (value: string) => void;
-  disabled?: boolean;
-  className?: string;
 }
 
 export function InputField({
@@ -14,21 +12,25 @@ export function InputField({
   onChange,
   disabled,
   className,
+  ref,
+  ...rest
 }: Props) {
   return (
     <input
+      ref={ref}
       type={inputType}
-      // ref={inputRef}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      // className="w-full px-2 py-2 text-lg bg-neutral-300 rounded border focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-neutral-200"
       className={cn(
         "w-full py-1.5 px-3 text-sm text-gray-700 bg-white placeholder-gray-300",
         "border border-gray-200 rounded-lg shadow-xs transition-shadow",
         "focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500",
+        "disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none",
+        inputType === "date" && "cursor-pointer",
         className,
       )}
       disabled={disabled}
+      {...rest}
     />
   );
 }
