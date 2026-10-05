@@ -1,15 +1,8 @@
-// import { useRef, useEffect } from "react";
-// import type { Item } from "../models/item";
+import { useEffect, useRef } from "react";
 import type { EditableItemKey, InvoiceItem } from "../types/invoice";
 import { InputField } from "./InputField";
 import { Trash2 } from "lucide-react";
 
-// type Props = {
-//   items: Item[];
-//   onChange: (val: string) => void;
-//   onSubmit: () => void;
-//   children?: React.ReactNode;
-// };
 interface Props {
   item: InvoiceItem;
   onUpdate: <K extends EditableItemKey>(
@@ -21,12 +14,11 @@ interface Props {
 }
 
 export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
-  // export function ItemsForm({ items, onChange, onSubmit, children }: Props) {
-  // const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // useEffect(() => {
-  //   inputRef.current?.focus();
-  // }, []);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <tr className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors group">
@@ -40,6 +32,7 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
       </td>
       <td className="p-3 align-middle">
         <InputField
+          ref={inputRef}
           value={item.name}
           inputType="text"
           onChange={(value) => onUpdate("name", value)}
@@ -48,8 +41,15 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
       <td className="p-3 align-middle">
         <InputField
           value={item.postingDate}
-          inputType="text"
+          inputType="date"
           onChange={(value) => onUpdate("postingDate", value)}
+          onClick={(e) => {
+            try {
+              e.currentTarget.showPicker?.();
+            } catch {
+              // Ignore unsupported environments
+            }
+          }}
         />
       </td>
       <td className="p-3 align-middle">
@@ -71,13 +71,15 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
           type="button"
           onClick={onRemove}
           disabled={!canRemove}
-          title={canRemove ? "Remove this row" : "Must keep at least one row"}
+          title={canRemove ? "Remove this row" : "Cannot remove row with ID 0"}
           className={`p-1.5 rounded-lg transition-colors ${
             canRemove
               ? "text-gray-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer"
               : "text-gray-200 cursor-not-allowed"
           }`}
-          aria-label={`Delete row ${item.id + 1}`}
+          aria-label={
+            canRemove ? `Delete row ${item.id}` : `Cannot delete row ${item.id}`
+          }
         >
           <Trash2 className="w-4 h-4" />
         </button>
