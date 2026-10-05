@@ -66,7 +66,9 @@ export function InvoiceCard() {
       >
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 my-0">Invoice</h2>
+            <h2 className="text-xl font-semibold text-gray-900 my-0">
+              Invoice
+            </h2>
             <p className="text-xs text-gray-500 mt-1">
               Manage and track your hardware expenses
             </p>

@@ -58,8 +58,9 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
             $
           </span>
           <InputField
-            value={item.priceUSD}
+            value={item.priceUSD === 0 ? "" : item.priceUSD}
             inputType="number"
+            placeholder="0"
             onChange={(value) => onUpdate("priceUSD", Number(value))}
             className="pl-6 pr-2.5 font-mono"
           />
