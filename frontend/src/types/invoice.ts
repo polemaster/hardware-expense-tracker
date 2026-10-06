@@ -13,4 +13,11 @@ export interface InvoiceItem {
   pricePLN?: number;
 }
 
+export type ServerInvoiceItem = Omit<InvoiceItem, "id">;
+
+export type ServerInvoiceInput = {
+  title: string;
+  items: ServerInvoiceItem[];
+};
+
 export type EditableItemKey = Exclude<keyof InvoiceItem, "id">;
