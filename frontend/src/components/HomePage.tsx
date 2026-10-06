@@ -4,7 +4,7 @@ import { InvoiceItemRow } from "./InvoiceItemRow";
 import { Plus } from "lucide-react";
 import { cn } from "../lib/utils";
 
-export function InvoiceCard() {
+export function HomePage() {
   const columnKeys = ["id", "name", "posting date", "price (USD)"];
 
   const [items, setItems] = useState<InvoiceItem[]>([
@@ -16,10 +16,7 @@ export function InvoiceCard() {
     },
   ]);
 
-  const totalPrice = items.reduce(
-    (sum, item) => sum + (Number(item.priceUSD) || 0),
-    0,
-  );
+  const totalPrice = items.reduce((acc, item) => acc + item.priceUSD, 0);
 
   function updateItem<K extends EditableItemKey>(
     itemId: number,
