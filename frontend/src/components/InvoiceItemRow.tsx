@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 
 interface Props {
   item: InvoiceItem;
+  lineNumber: number;
   onUpdate: <K extends EditableItemKey>(
     itemKey: K,
     value: InvoiceItem[K],
@@ -13,7 +14,13 @@ interface Props {
   onRemove: () => void;
 }
 
-export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
+export function InvoiceItemRow({
+  item,
+  lineNumber,
+  onUpdate,
+  canRemove,
+  onRemove,
+}: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -24,8 +31,8 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
     <tr className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors group">
       <td className="p-3 align-middle">
         <InputField
-          value={item.id}
-          inputType="number"
+          value={lineNumber}
+          inputType="text"
           onChange={() => {}}
           disabled={true}
         />
@@ -36,6 +43,7 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
           value={item.name}
           inputType="text"
           onChange={(value) => onUpdate("name", value)}
+          required
         />
       </td>
       <td className="p-3 align-middle">
@@ -50,6 +58,7 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
               // Ignore unsupported environments
             }
           }}
+          required
         />
       </td>
       <td className="p-3 align-middle">
@@ -58,10 +67,12 @@ export function InvoiceItemRow({ item, onUpdate, canRemove, onRemove }: Props) {
             $
           </span>
           <InputField
-            value={item.priceUSD}
+            value={item.priceUSD === 0 ? "" : item.priceUSD}
             inputType="number"
+            placeholder="0"
             onChange={(value) => onUpdate("priceUSD", Number(value))}
             className="pl-6 pr-2.5 font-mono"
+            required
           />
         </div>
       </td>
