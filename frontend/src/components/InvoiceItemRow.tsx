@@ -43,6 +43,7 @@ export function InvoiceItemRow({
           value={item.name}
           inputType="text"
           onChange={(value) => onUpdate("name", value)}
+          required
         />
       </td>
       <td className="p-3 align-middle">
@@ -57,6 +58,7 @@ export function InvoiceItemRow({
               // Ignore unsupported environments
             }
           }}
+          required
         />
       </td>
       <td className="p-3 align-middle">
@@ -70,6 +72,7 @@ export function InvoiceItemRow({
             placeholder="0"
             onChange={(value) => onUpdate("priceUSD", Number(value))}
             className="pl-6 pr-2.5 font-mono"
+            required
           />
         </div>
       </td>

@@ -3,6 +3,8 @@ export interface Invoice {
   title: string;
   items: InvoiceItem[];
   createdAt: string;
+  totalPrice: number;
+  totalPricePLN?: number;
 }
 
 export interface InvoiceItem {

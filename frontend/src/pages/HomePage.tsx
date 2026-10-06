@@ -46,6 +46,7 @@ export function HomePage() {
               placeholder="Enter invoice title"
               value={title}
               onChange={setTitle}
+              required
             />
           </div>
 
