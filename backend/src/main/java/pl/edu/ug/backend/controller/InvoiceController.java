@@ -1,5 +1,6 @@
 package pl.edu.ug.backend.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class InvoiceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public InvoiceResponse createInvoice(@RequestBody InvoiceCreationRequest request) {
+    public InvoiceResponse createInvoice(@Valid @RequestBody InvoiceCreationRequest request) {
         return invoiceService.create(request);
     }
 
