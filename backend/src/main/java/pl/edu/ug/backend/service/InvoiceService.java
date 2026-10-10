@@ -1,5 +1,6 @@
 package pl.edu.ug.backend.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.ug.backend.dto.invoice.InvoiceCreationRequest;
 import pl.edu.ug.backend.dto.invoice_item.InvoiceItemRequest;
@@ -17,16 +18,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceToResponseMapper invoiceToResponseMapper;
     private final ExchangeRateClient exchangeRateClient;
-
-    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceToResponseMapper invoiceToResponseMapper, ExchangeRateClient exchangeRateClient) {
-        this.invoiceRepository = invoiceRepository;
-        this.invoiceToResponseMapper = invoiceToResponseMapper;
-        this.exchangeRateClient = exchangeRateClient;
-    }
 
     public List<InvoiceResponse> getAll() {
         return invoiceRepository.findAll()
