@@ -3,6 +3,7 @@ package pl.edu.ug.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +18,14 @@ public class Invoice {
 
     private String title;
 
+    private LocalDate creationDate;
+
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvoiceItem> items = new ArrayList<>();
 
-    public Invoice(String title) {
+    public Invoice(String title, LocalDate creationDate) {
         this.title = title;
+        this.creationDate = creationDate;
     }
 
     public void addItem(InvoiceItem item) {

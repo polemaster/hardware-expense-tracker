@@ -2,7 +2,8 @@ package pl.edu.ug.backend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.ug.backend.entity.Invoice;
+import pl.edu.ug.backend.dto.invoice.InvoiceCreationRequest;
+import pl.edu.ug.backend.dto.invoice.InvoiceResponse;
 import pl.edu.ug.backend.service.InvoiceService;
 
 import java.util.List;
@@ -18,14 +19,14 @@ public class InvoiceController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Invoice> getInvoices() {
+    public List<InvoiceResponse> getInvoices() {
         return invoiceService.getAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Invoice createInvoice() {
-        return invoiceService.create();
+    public InvoiceResponse createInvoice(@RequestBody InvoiceCreationRequest request) {
+        return invoiceService.create(request);
     }
 
 }

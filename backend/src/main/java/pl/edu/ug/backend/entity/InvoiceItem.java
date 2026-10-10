@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,7 +21,7 @@ public class InvoiceItem {
     @Column(name = "nazwa")
     private String name;
     @Column(name = "data_ksiegowania")
-    private String postingDate;
+    private LocalDate postingDate;
     @Column(name = "koszt_USD")
     private BigDecimal costUSD;
     @Column(name = "koszt_PLN")
@@ -28,4 +30,11 @@ public class InvoiceItem {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "invoice_id", nullable = false)
     private Invoice invoice;
+
+    public InvoiceItem(String name, LocalDate postingDate, BigDecimal costUSD, BigDecimal costPLN) {
+        this.name = name;
+        this.postingDate = postingDate;
+        this.costUSD = costUSD;
+        this.costPLN = costPLN;
+    }
 }
