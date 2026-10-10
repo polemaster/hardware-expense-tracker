@@ -1,4 +1,4 @@
-package pl.edu.ug.backend.dto;
+package pl.edu.ug.backend.dto.invoice_item;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

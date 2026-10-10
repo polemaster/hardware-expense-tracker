@@ -31,9 +31,10 @@ public class InvoiceItem {
     @JoinColumn(name = "invoice_id", nullable = false)
     private Invoice invoice;
 
-    public InvoiceItem(String name, LocalDate postingDate, BigDecimal costUSD) {
+    public InvoiceItem(String name, LocalDate postingDate, BigDecimal costUSD, BigDecimal costPLN) {
         this.name = name;
         this.postingDate = postingDate;
         this.costUSD = costUSD;
+        this.costPLN = costPLN;
     }
 }

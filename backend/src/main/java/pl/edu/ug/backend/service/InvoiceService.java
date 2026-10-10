@@ -1,24 +1,31 @@
 package pl.edu.ug.backend.service;
 
 import org.springframework.stereotype.Service;
-import pl.edu.ug.backend.dto.InvoiceCreationRequest;
-import pl.edu.ug.backend.dto.InvoiceItemRequest;
-import pl.edu.ug.backend.dto.InvoiceResponse;
-import pl.edu.ug.backend.dto.mapper.InvoiceToResponseMapper;
+import pl.edu.ug.backend.dto.invoice.InvoiceCreationRequest;
+import pl.edu.ug.backend.dto.invoice_item.InvoiceItemRequest;
+import pl.edu.ug.backend.dto.invoice.InvoiceResponse;
+import pl.edu.ug.backend.dto.invoice.InvoiceToResponseMapper;
 import pl.edu.ug.backend.entity.Invoice;
 import pl.edu.ug.backend.entity.InvoiceItem;
+import pl.edu.ug.backend.external_api.ExchangeRateClient;
+import pl.edu.ug.backend.external_api.ExchangeRateResponse;
 import pl.edu.ug.backend.repository.InvoiceRepository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceToResponseMapper invoiceToResponseMapper;
+    private final ExchangeRateClient exchangeRateClient;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceToResponseMapper invoiceToResponseMapper) {
+    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceToResponseMapper invoiceToResponseMapper, ExchangeRateClient exchangeRateClient) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceToResponseMapper = invoiceToResponseMapper;
+        this.exchangeRateClient = exchangeRateClient;
     }
 
     public List<InvoiceResponse> getAll() {
@@ -35,10 +42,16 @@ public class InvoiceService {
         );
 
         for (InvoiceItemRequest itemRequest : request.items()) {
+            LocalDate postingDate = itemRequest.postingDate();
+            BigDecimal rate = exchangeRateClient.getPLNRate("USD", postingDate);
+            BigDecimal costUSD = itemRequest.costUSD();
+            BigDecimal costPLN = costUSD.multiply(rate).setScale(2, RoundingMode.HALF_UP);
+
             InvoiceItem item = new InvoiceItem(
                 itemRequest.name(),
-                itemRequest.postingDate(),
-                itemRequest.costUSD()
+                postingDate,
+                costUSD,
+                costPLN
             );
 
             invoice.addItem(item);

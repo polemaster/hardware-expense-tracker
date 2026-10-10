@@ -1,4 +1,6 @@
-package pl.edu.ug.backend.dto;
+package pl.edu.ug.backend.dto.invoice;
+
+import pl.edu.ug.backend.dto.invoice_item.InvoiceItemRequest;
 
 import java.time.LocalDate;
 import java.util.List;

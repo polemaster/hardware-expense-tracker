@@ -2,9 +2,8 @@ package pl.edu.ug.backend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.ug.backend.dto.InvoiceCreationRequest;
-import pl.edu.ug.backend.dto.InvoiceResponse;
-import pl.edu.ug.backend.entity.Invoice;
+import pl.edu.ug.backend.dto.invoice.InvoiceCreationRequest;
+import pl.edu.ug.backend.dto.invoice.InvoiceResponse;
 import pl.edu.ug.backend.service.InvoiceService;
 
 import java.util.List;

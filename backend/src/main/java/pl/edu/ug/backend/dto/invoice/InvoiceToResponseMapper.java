@@ -1,7 +1,7 @@
-package pl.edu.ug.backend.dto.mapper;
+package pl.edu.ug.backend.dto.invoice;
 
 import org.springframework.stereotype.Component;
-import pl.edu.ug.backend.dto.InvoiceResponse;
+import pl.edu.ug.backend.dto.invoice_item.InvoiceItemToResponseMapper;
 import pl.edu.ug.backend.entity.Invoice;
 
 import java.util.function.Function;
