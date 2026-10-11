@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getInvoices } from "../api/invoices";
+import { getInvoices } from "../api/getInvoices";
 import { LoadingButton } from "../components/LoadingButton";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { InvoiceCard } from "../components/InvoiceCard";
 import type { ApiError } from "../api/ApiError";
+import type { InvoiceResponse } from "../types/responses";
 
 export function InvoicesPage() {
   const {
@@ -12,22 +13,30 @@ export function InvoicesPage() {
     isError,
     error,
     refetch,
-  } = useQuery({
+    isFetching,
+  } = useQuery<InvoiceResponse[], ApiError>({
     queryKey: ["invoices"],
     queryFn: getInvoices,
   });
 
-  const apiError = error as ApiError | null;
-
   return (
     <div className="w-full max-w-4xl mx-auto bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-      <div className="px-6 py-5 border-b border-gray-100">
-        <h2 className="text-xl font-semibold text-gray-900 my-0">
-          Invoice Page
-        </h2>
-        <p className="text-xs text-gray-500 mt-1">
-          Manage and track your hardware expenses
-        </p>
+      <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 my-0">
+            Invoice Page
+          </h2>
+          <p className="text-xs text-gray-500 mt-1">
+            Manage and track your hardware expenses
+          </p>
+        </div>
+        <LoadingButton
+          onClick={() => refetch()}
+          isLoading={isFetching}
+          loadingText="Refreshing..."
+        >
+          Refresh
+        </LoadingButton>
       </div>
 
       <div className="p-6">
@@ -39,10 +48,8 @@ export function InvoicesPage() {
 
         {isError && (
           <ErrorMessage
-            message={
-              apiError?.message || error?.message || "Failed to fetch invoices"
-            }
-            status={apiError?.status || 500}
+            message={error?.message || "Failed to fetch invoices"}
+            status={error?.status || 500}
             onDismiss={() => refetch()}
           />
         )}

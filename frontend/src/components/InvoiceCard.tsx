@@ -1,33 +1,30 @@
-import type { Invoice } from "../types/invoice";
+import type { InvoiceResponse } from "../types/responses";
+import { getInvoiceTotalUSD, getInvoiceTotalPLN } from "../lib/utils";
 
 interface InvoiceCardProps {
-  invoice: Invoice;
+  invoice: InvoiceResponse;
 }
 
 export function InvoiceCard({ invoice }: InvoiceCardProps) {
-  const hasPLN =
-    invoice.totalPricePLN != null ||
-    invoice.items?.some((item) => item.pricePLN != null);
+  const hasPLN = invoice.items?.some((item) => item.costPLN != null) ?? false;
 
   const formattedDate = (() => {
-    if (!invoice.createdAt) return null;
+    if (!invoice.creationDate) return null;
     try {
-      const d = new Date(invoice.createdAt);
-      if (isNaN(d.getTime())) return invoice.createdAt;
+      const d = new Date(invoice.creationDate);
+      if (isNaN(d.getTime())) return invoice.creationDate;
       return d.toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
       });
     } catch {
-      return invoice.createdAt;
+      return invoice.creationDate;
     }
   })();
 
-  const totalPrice =
-    invoice.totalPrice ??
-    invoice.items?.reduce((acc, item) => acc + item.priceUSD, 0) ??
-    0;
+  const totalPriceUSD = getInvoiceTotalUSD(invoice);
+  const totalPricePLN = getInvoiceTotalPLN(invoice);
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-2xs">
@@ -54,15 +51,15 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
           </span>
           <span className="text-base font-bold font-mono text-gray-900">
             $
-            {totalPrice.toLocaleString("en-US", {
+            {totalPriceUSD.toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
           </span>
-          {invoice.totalPricePLN != null && (
+          {hasPLN && (
             <span className="text-xs text-gray-500 block font-mono">
               ~{" "}
-              {invoice.totalPricePLN.toLocaleString("en-US", {
+              {totalPricePLN.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}{" "}
@@ -88,7 +85,7 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
               <tbody className="bg-white divide-y divide-gray-100">
                 {invoice.items.map((item, index) => (
                   <tr
-                    key={item.id || index}
+                    key={`${item.invoiceId}-${index}`}
                     className="hover:bg-gray-50/70 transition-colors"
                   >
                     <td className="p-3 text-sm text-gray-500 font-mono">
@@ -102,15 +99,15 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
                     </td>
                     <td className="p-3 text-sm text-gray-900 font-mono">
                       $
-                      {item.priceUSD.toLocaleString("en-US", {
+                      {item.costUSD.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}
                     </td>
                     {hasPLN && (
                       <td className="p-3 text-sm text-gray-900 font-mono">
-                        {item.pricePLN != null
-                          ? `${item.pricePLN.toLocaleString("en-US", {
+                        {item.costPLN != null
+                          ? `${item.costPLN.toLocaleString("en-US", {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
                             })} PLN`
@@ -130,19 +127,18 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
                   </td>
                   <td className="px-3 py-2.5 font-mono font-semibold text-gray-900">
                     <span className="text-gray-500 text-xs mr-0.5">$</span>
-                    {totalPrice.toLocaleString("en-US", {
+                    {totalPriceUSD.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
                   </td>
                   {hasPLN && (
                     <td className="px-3 py-2.5 font-mono font-semibold text-gray-900">
-                      {invoice.totalPricePLN != null
-                        ? `${invoice.totalPricePLN.toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })} PLN`
-                        : ""}
+                      {totalPricePLN.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      PLN
                     </td>
                   )}
                 </tr>

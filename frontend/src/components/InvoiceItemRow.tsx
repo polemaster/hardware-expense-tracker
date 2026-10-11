@@ -67,10 +67,10 @@ export function InvoiceItemRow({
             $
           </span>
           <InputField
-            value={item.priceUSD === 0 ? "" : item.priceUSD}
+            value={item.costUSD === 0 ? "" : item.costUSD}
             inputType="number"
             placeholder="0"
-            onChange={(value) => onUpdate("priceUSD", Number(value))}
+            onChange={(value) => onUpdate("costUSD", Number(value))}
             className="pl-6 pr-2.5 font-mono"
             required
           />

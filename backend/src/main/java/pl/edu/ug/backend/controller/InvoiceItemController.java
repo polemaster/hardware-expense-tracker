@@ -2,10 +2,7 @@ package pl.edu.ug.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.ug.backend.dto.invoice_item.InvoiceItemResponse;
 import pl.edu.ug.backend.service.InvoiceItemService;
 
@@ -14,6 +11,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/invoice-items")
+@CrossOrigin(origins = "http://localhost:5173")
 public class InvoiceItemController {
     private final InvoiceItemService invoiceItemService;
 
