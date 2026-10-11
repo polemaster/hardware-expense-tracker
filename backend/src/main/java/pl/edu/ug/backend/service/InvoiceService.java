@@ -23,6 +23,7 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceToResponseMapper invoiceToResponseMapper;
     private final ExchangeRateClient exchangeRateClient;
+    private final InvoiceXmlService invoiceXmlService;
 
     public List<InvoiceResponse> getAll() {
         return invoiceRepository.findAll()
@@ -53,7 +54,10 @@ public class InvoiceService {
             invoice.addItem(item);
         }
 
-        return invoiceToResponseMapper.apply(invoiceRepository.save(invoice));
+        Invoice savedInvoice = invoiceRepository.save(invoice);
+        invoiceXmlService.saveInvoiceToXml(savedInvoice);
+
+        return invoiceToResponseMapper.apply(savedInvoice);
     }
 
 }
