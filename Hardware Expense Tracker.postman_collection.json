@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "f0c7bb86-9dec-4117-881e-4de4b4ae5cf8",
+    "name": "Hardware Expense Tracker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44579718"
+  },
+  "item": [
+    {
+      "name": "Get all invoices",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/invoices",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "invoices"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all invoice items",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/invoice-items",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "invoice-items"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get invoice items containing \"tu\" and sort by postingDate descending",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/invoice-items?name=tu&sortBy=postingDate&direction=DESC",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "invoice-items"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "tu"
+            },
+            {
+              "key": "sortBy",
+              "value": "postingDate"
+            },
+            {
+              "key": "direction",
+              "value": "DESC"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get invoice items containing \"tu\" and sort by name descending",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/invoice-items?name=tu&sortBy=name&direction=DESC",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "invoice-items"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "tu"
+            },
+            {
+              "key": "sortBy",
+              "value": "name"
+            },
+            {
+              "key": "direction",
+              "value": "DESC"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post a first invoice",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"New computers\",\n  \"creationDate\": \"2026-10-10\",\n  \"items\": [\n    {\n      \"name\": \"ACER Aspire\",\n      \"postingDate\": \"2026-07-03\",\n      \"costUSD\": 345\n    },\n    {\n      \"name\": \"DELL Latitude\",\n      \"postingDate\": \"2026-07-12\",\n      \"costUSD\": 543\n    },\n    {\n      \"name\": \"HP Victus\",\n      \"postingDate\": \"2026-07-15\",\n      \"costUSD\": 346\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/invoices",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "invoices"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

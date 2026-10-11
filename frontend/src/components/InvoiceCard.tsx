@@ -1,5 +1,9 @@
 import type { InvoiceResponse } from "../types/responses";
-import { getInvoiceTotalUSD, getInvoiceTotalPLN } from "../lib/utils";
+import {
+  getInvoiceTotalUSD,
+  getInvoiceTotalPLN,
+  formatDate,
+} from "../lib/utils";
 
 interface InvoiceCardProps {
   invoice: InvoiceResponse;
@@ -7,21 +11,9 @@ interface InvoiceCardProps {
 
 export function InvoiceCard({ invoice }: InvoiceCardProps) {
   const hasPLN = invoice.items?.some((item) => item.costPLN != null) ?? false;
-
-  const formattedDate = (() => {
-    if (!invoice.creationDate) return null;
-    try {
-      const d = new Date(invoice.creationDate);
-      if (isNaN(d.getTime())) return invoice.creationDate;
-      return d.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    } catch {
-      return invoice.creationDate;
-    }
-  })();
+  const formattedDate = invoice.creationDate
+    ? formatDate(invoice.creationDate)
+    : null;
 
   const totalPriceUSD = getInvoiceTotalUSD(invoice);
   const totalPricePLN = getInvoiceTotalPLN(invoice);
@@ -95,7 +87,7 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
                       {item.name}
                     </td>
                     <td className="p-3 text-sm text-gray-600">
-                      {item.postingDate}
+                      {formatDate(item.postingDate)}
                     </td>
                     <td className="p-3 text-sm text-gray-900 font-mono">
                       $
