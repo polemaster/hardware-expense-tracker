@@ -1,30 +1,48 @@
 import { useState, useMemo } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createInvoice } from "../api/createInvoice";
 import type { EditableItemKey, InvoiceItem } from "../types/invoice";
-import { useCreateInvoice } from "./useCreateInvoice";
 import type { ApiError } from "../api/ApiError";
+import type { InvoiceResponse } from "../types/responses";
+import type { InvoiceCreationRequest } from "../types/requests";
+import { getItemsTotalUSD } from "../lib/utils";
 
-export function useInvoice() {
-  const [title, setTitle] = useState("");
-  const [items, setItems] = useState<InvoiceItem[]>([
+function createEmptyItems(): InvoiceItem[] {
+  return [
     {
       id: crypto.randomUUID(),
       name: "",
       postingDate: "",
-      priceUSD: 0,
+      costUSD: 0,
     },
-  ]);
+  ];
+}
 
-  const createInvoice = useCreateInvoice();
+export function useInvoice() {
+  const queryClient = useQueryClient();
+  const [title, setTitle] = useState("");
+  const [items, setItems] = useState<InvoiceItem[]>(createEmptyItems);
 
-  const totalPrice = useMemo(
-    () => items.reduce((acc, item) => acc + item.priceUSD, 0),
-    [items],
-  );
+  const createInvoiceMutation = useMutation<
+    InvoiceResponse,
+    ApiError,
+    InvoiceCreationRequest
+  >({
+    mutationFn: createInvoice,
+    onSuccess: () => {
+      resetForm();
+      queryClient.invalidateQueries({
+        queryKey: ["invoices"],
+      });
+    },
+  });
+
+  const totalPrice = getItemsTotalUSD(items);
 
   function addItem() {
     setItems((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), name: "", postingDate: "", priceUSD: 0 },
+      { id: crypto.randomUUID(), name: "", postingDate: "", costUSD: 0 },
     ]);
   }
 
@@ -45,31 +63,26 @@ export function useInvoice() {
   }
 
   function clearError() {
-    createInvoice.reset();
+    createInvoiceMutation.reset();
   }
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  function resetForm() {
+    setTitle("");
+    setItems(createEmptyItems());
+  }
+
+  function getTodaysDate() {
+    return new Date().toISOString().split("T")[0];
+  }
+
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    try {
-      await createInvoice.mutateAsync({
-        title,
-        items: items.map(({ id, ...item }) => item), // eslint-disable-line @typescript-eslint/no-unused-vars
-      });
-
-      setItems([
-        {
-          id: crypto.randomUUID(),
-          name: "",
-          postingDate: "",
-          priceUSD: 0,
-        },
-      ]);
-      setTitle("");
-    } catch {
-      // Error is caught to prevent unhandled rejection,
-      // and state is preserved in createInvoice.error
-    }
+    createInvoiceMutation.mutate({
+      title,
+      creationDate: getTodaysDate(),
+      items: items.map(({ id, ...item }) => item), // eslint-disable-line @typescript-eslint/no-unused-vars
+    });
   }
 
   return {
@@ -81,8 +94,8 @@ export function useInvoice() {
     updateItem,
     removeItem,
     handleSubmit,
-    isSubmitting: createInvoice.isPending,
-    error: createInvoice.error as ApiError,
+    isSubmitting: createInvoiceMutation.isPending,
+    error: createInvoiceMutation.error,
     clearError,
   };
 }
