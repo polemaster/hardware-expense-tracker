@@ -26,6 +26,14 @@ export function NavButtons() {
       >
         Invoices
       </NavLink>
+      <NavLink
+        to="/items"
+        className={({ isActive }) =>
+          cn(linkClasses, isActive ? activeClasses : inactiveClasses)
+        }
+      >
+        Items
+      </NavLink>
     </nav>
   );
 }

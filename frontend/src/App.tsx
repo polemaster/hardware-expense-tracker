@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { InvoicesPage } from "./pages/InvoicesPage";
+import { InvoiceItemsPage } from "./pages/InvoiceItemsPage";
 import { Navbar } from "./components/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -16,6 +17,11 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/invoices" element={<InvoicesPage />} />
+              <Route path="/items" element={<InvoiceItemsPage />} />
+              <Route
+                path="/invoice-items"
+                element={<Navigate to="/items" replace />}
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
