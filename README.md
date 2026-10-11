@@ -46,3 +46,12 @@ Run *backend/BackendApplication.java* using your IDE of choice (e.g. IntelliJ ID
 <img width="1840" height="1168" alt="image" src="https://github.com/user-attachments/assets/dcf220b2-1c45-4be2-83b3-55e52dfe9499" />
 
 <img width="1856" height="1104" alt="image" src="https://github.com/user-attachments/assets/ca57c1e1-1449-4f04-b3c0-e73642d95460" />
+
+
+### Possible improvements
+Things that could be improved but were not a part of the task:
+- adding a Product entity with one to many relationship with InvoiceItem
+- moving postingDate to Invoice rather than InvoiceItem
+- supporting modification and deletion of currently stored data, both in the UI and on the server (second half of CRUD)
+- adding more unit tests
+- making the app ready for production
